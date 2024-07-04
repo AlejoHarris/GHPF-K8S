@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mysql
+spec:
+  destination:
+    namespace: geekhub
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: mysql
+    repoURL: 'https://github.com/AlejoHarris/GHPF-K8S.git'
+    targetRevision: HEAD
+  project: geekhub
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
