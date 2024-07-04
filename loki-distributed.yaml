@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: loki-distributed
-  namespace: argocd
+  namespace: argo-cd
 spec:
   destination:
     namespace: grafana
