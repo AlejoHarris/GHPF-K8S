@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: loki-distributed
+  namespace: argocd
+spec:
+  destination:
+    namespace: grafana
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: loki-distributed
+    repoURL: 'https://github.com/AlejoHarris/GHPF-K8S.git'
+    targetRevision: HEAD
+  project: geekhub
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
