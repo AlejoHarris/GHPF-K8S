@@ -15,14 +15,14 @@ services:
       MYSQL_PASSWORD: "123456"
       MYSQL_DB: "testdb"
       CORS: "http://localhost:8080"
-    build: GHPF-Backend/.
+    build: ../../GHPF-Backend/.
     ports:
       - "3000:3000"
     depends_on:
       - db
   frontend:
     build: 
-      context: GHPF-Frontend/.
+      context: ../../GHPF-Frontend/.
       args:
         - REACT_APP_APIURL=http://localhost:3000
     ports:
