@@ -15,14 +15,14 @@ logstashConfig: {}
 
 # Allows you to add any pipeline files in /usr/share/logstash/pipeline/
 ### ***warn*** there is a hardcoded logstash.conf in the image, override it first
-logstashPipeline: 
+logstashPipeline:
   logstash.conf: |
     input {
       beats {
-        port => "5044"
+        port => 5044
       }
     }
-    output { elasticsearch { hosts => http://elasticsearch-master:9200 } }
+    output { elasticsearch { hosts => "http://elasticsearch-master:9200" } }
 
 # Allows you to add any pattern files in your custom pattern dir
 logstashPatternDir: "/usr/share/logstash/patterns/"
@@ -70,7 +70,7 @@ hostAliases: []
 #  - "bar.local"
 
 image: "docker.elastic.co/logstash/logstash"
-imageTag: "8.5.1"
+imageTag: "7.17.3"
 imagePullPolicy: "IfNotPresent"
 imagePullSecrets: []
 

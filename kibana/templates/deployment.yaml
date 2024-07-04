@@ -47,24 +47,19 @@ spec:
       hostAliases: {{ toYaml .Values.hostAliases | nindent 6 }}
       {{- end }}
       volumes:
-        - name: kibana-tokens
-          emptyDir: {}
-        - name: elasticsearch-certs
-          secret:
-            secretName: {{ .Values.elasticsearchCertificateSecret }}
-        {{- if .Values.kibanaConfig }}
-        - name: kibanaconfig
-          configMap:
-            name: {{ template "kibana.fullname" . }}-config
-        {{- end }}
         {{- range .Values.secretMounts }}
         - name: {{ .name }}
           secret:
             secretName: {{ .secretName }}
         {{- end }}
-        {{- if .Values.extraVolumes }}
-{{ toYaml .Values.extraVolumes | indent 8 }}
+        {{- if .Values.kibanaConfig }}
+        - name: kibanaconfig
+          configMap:
+            name: {{ template "kibana.fullname" . }}-config
         {{- end }}
+      {{- if .Values.extraVolumes }}
+{{ toYaml .Values.extraVolumes | indent 8 }}
+      {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
@@ -81,11 +76,11 @@ spec:
       imagePullSecrets:
 {{ toYaml .Values.imagePullSecrets | indent 8 }}
     {{- end }}
-      initContainers:
       {{- if .Values.extraInitContainers }}
       # Currently some extra blocks accept strings
       # to continue with backwards compatibility this is being kept
       # whilst also allowing for yaml to be specified too.
+      initContainers:
       {{- if eq "string" (printf "%T" .Values.extraInitContainers) }}
 {{ tpl .Values.extraInitContainers . | indent 6 }}
       {{- else }}
@@ -106,16 +101,8 @@ spec:
           - name: ELASTICSEARCH_HOSTS
             value: "{{ .Values.elasticsearchHosts }}"
           {{- end }}
-          - name: ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES
-            value: "{{ template "kibana.home_dir" . }}/config/certs/{{ .Values.elasticsearchCertificateAuthoritiesFile }}"
           - name: SERVER_HOST
             value: "{{ .Values.serverHost }}"
-          - name: ELASTICSEARCH_SERVICEACCOUNTTOKEN
-            valueFrom:
-              secretKeyRef:
-                name: {{ template "kibana.fullname" . }}-es-token
-                key: token
-                optional: false
 {{- if .Values.extraEnvs }}
 {{ toYaml .Values.extraEnvs | indent 10 }}
 {{- end }}
@@ -163,12 +150,6 @@ spec:
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
-          - name: elasticsearch-certs
-            mountPath: {{ template "kibana.home_dir" . }}/config/certs
-            readOnly: true
-          - name: kibana-tokens
-            mountPath: {{ template "kibana.home_dir" . }}/config/tokens
-            readOnly: true
           {{- range .Values.secretMounts }}
           - name: {{ .name }}
             mountPath: {{ .path }}
@@ -178,7 +159,7 @@ spec:
           {{- end }}
           {{- range $path, $config := .Values.kibanaConfig }}
           - name: kibanaconfig
-            mountPath: {{ template "kibana.home_dir" . }}/config/{{ $path }}
+            mountPath: /usr/share/kibana/config/{{ $path }}
             subPath: {{ $path }}
           {{- end -}}
         {{- if .Values.extraVolumeMounts }}

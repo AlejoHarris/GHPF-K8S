@@ -37,7 +37,7 @@ spec:
   rules:
   {{- range .Values.ingress.hosts }}
     {{- /*
-    TODO: deprecate $ingressPath for Logstash 8.x
+    TODO: deprecate $ingressPath for Logstash 8.0.0
     */}}
     {{- if $ingressPath }}
   - host: {{ . }}
