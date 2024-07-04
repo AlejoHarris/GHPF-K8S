@@ -11,7 +11,7 @@ spec:
     path: promtail
     repoURL: 'https://github.com/AlejoHarris/GHPF-K8S.git'
     targetRevision: HEAD
-  project: geekhub
+  project: monitoring
   syncPolicy:
     automated:
       prune: true
