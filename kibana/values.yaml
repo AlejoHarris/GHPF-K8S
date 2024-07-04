@@ -64,8 +64,10 @@ healthCheckPath: "/app/kibana"
 # such as kibana.yml
 kibanaConfig: 
   kibana.yml: |
+    elasticsearch:
+      hosts: ["http://elasticsearch:9200"]
+    xpack.security.enabled: true
     xpack.security.http.ssl.enabled: false
-    elasticsearch.hosts: ["http://elasticsearch:9200"]
 
 # If Pod Security Policy in use it may be required to specify security context as well as service account
 
