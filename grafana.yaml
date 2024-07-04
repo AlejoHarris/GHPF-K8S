@@ -13,9 +13,9 @@ spec:
     targetRevision: HEAD
     helm:
       valueFiles:
-        - values.yaml
-        - loki-distributed-overrides.yaml
-        - promtail-overrides.yaml
+        - grafana/values.yaml
+        - grafana/loki-distributed-overrides.yaml
+      #  - promtail-overrides.yaml
   project: geekhub
   syncPolicy:
     automated:
