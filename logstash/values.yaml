@@ -70,7 +70,7 @@ hostAliases: []
 #  - "bar.local"
 
 image: "docker.elastic.co/logstash/logstash"
-imageTag: "7.17.3"
+imageTag: "7.15.0"
 imagePullPolicy: "IfNotPresent"
 imagePullSecrets: []
 
@@ -128,24 +128,24 @@ persistence:
   annotations: {}
 
 extraVolumes:
-  []
+  ""
   # - name: extras
   #   emptyDir: {}
 
 extraVolumeMounts:
-  []
+  ""
   # - name: extras
   #   mountPath: /usr/share/extras
   #   readOnly: true
 
 extraContainers:
-  []
+  ""
   # - name: do-something
   #   image: busybox
   #   command: ['do', 'something']
 
 extraInitContainers:
-  []
+  ""
   # - name: do-something
   #   image: busybox
   #   command: ['do', 'something']
@@ -206,7 +206,7 @@ terminationGracePeriod: 120
 
 # Probes
 # Default probes are using `httpGet` which requires that `http.host: 0.0.0.0` is part of
-# `logstash.yml`. If needed probes can be disabled or overridden using the following syntaxes:
+# `logstash.yml`. If needed probes can be disabled or overrided using the following syntaxes:
 #
 # disable livenessProbe
 # livenessProbe: null
@@ -275,19 +275,10 @@ service:
 
 ingress:
   enabled: false
-  annotations:
-    {}
-    # kubernetes.io/tls-acme: "true"
-  className: "nginx"
-  pathtype: ImplementationSpecific
-  hosts:
-    - host: logstash-example.local
-      paths:
-        - path: /beats
-          servicePort: 5044
-        - path: /http
-          servicePort: 8080
-  tls: []
-  #  - secretName: logstash-example-tls
-  #    hosts:
-  #      - logstash-example.local
+#  annotations: {}
+#  hosts:
+#    - host: logstash.local
+#      paths:
+#        - path: /logs
+#          servicePort: 8080
+#  tls: []

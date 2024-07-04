@@ -3,12 +3,6 @@ kind: Deployment
 metadata:
   name: {{ template "kibana.fullname" . }}
   labels: {{ include "kibana.labels" . | nindent 4 }}
-  {{- if .Values.annotations }}
-  annotations:
-    {{- range $key, $value := .Values.annotations }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}
-  {{- end }}
 spec:
   replicas: {{ .Values.replicas }}
   strategy:
@@ -34,7 +28,6 @@ spec:
         configchecksum: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum | trunc 63 }}
         {{- end }}
     spec:
-      automountServiceAccountToken: {{ .Values.automountToken }}
 {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
 {{- end }}
@@ -114,7 +107,7 @@ spec:
 {{ toYaml .Values.readinessProbe | indent 10 }}
           exec:
             command:
-              - bash
+              - sh
               - -c
               - |
                 #!/usr/bin/env bash -e

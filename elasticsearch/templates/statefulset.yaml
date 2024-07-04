@@ -57,7 +57,7 @@ spec:
         {{ $key }}: {{ $value | quote }}
         {{- end }}
         {{/* This forces a restart if the configmap has changed */}}
-        {{- if or .Values.esConfig .Values.esJvmOptions }}
+        {{- if .Values.esConfig }}
         configchecksum: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum | trunc 63 }}
         {{- end }}
     spec:
@@ -69,10 +69,11 @@ spec:
         {{- if .Values.fsGroup }}
         fsGroup: {{ .Values.fsGroup }} # Deprecated value, please use .Values.podSecurityContext.fsGroup
         {{- end }}
-      {{- if or .Values.rbac.create .Values.rbac.serviceAccountName }}
-      serviceAccountName: "{{ template "elasticsearch.serviceAccount" . }}"
+      {{- if .Values.rbac.create }}
+      serviceAccountName: "{{ template "elasticsearch.uname" . }}"
+      {{- else if not (eq .Values.rbac.serviceAccountName "") }}
+      serviceAccountName: {{ .Values.rbac.serviceAccountName | quote }}
       {{- end }}
-      automountServiceAccountToken: {{ .Values.rbac.automountToken }}
       {{- with .Values.tolerations }}
       tolerations:
 {{ toYaml . | indent 6 }}
@@ -129,11 +130,6 @@ spec:
           configMap:
             name: {{ template "elasticsearch.uname" . }}-config
         {{- end }}
-        {{- if .Values.esJvmOptions }}
-        - name: esjvmoptions
-          configMap:
-            name: {{ template "elasticsearch.uname" . }}-jvm-options
-        {{- end }}
 {{- if .Values.keystore }}
         - name: keystore
           emptyDir: {}
@@ -175,14 +171,13 @@ spec:
       {{- end }}
 {{ if .Values.keystore }}
       - name: keystore
-        securityContext:
-{{ toYaml .Values.securityContext | indent 10 }}
         image: "{{ .Values.image }}:{{ .Values.imageTag }}"
         imagePullPolicy: "{{ .Values.imagePullPolicy }}"
         command:
-        - bash
+        - sh
         - -c
         - |
+          #!/usr/bin/env bash
           set -euo pipefail
 
           elasticsearch-keystore create
@@ -231,10 +226,10 @@ spec:
         readinessProbe:
           exec:
             command:
-              - bash
+              - sh
               - -c
               - |
-                set -e
+                #!/usr/bin/env bash -e
                 # If the node is starting up wait for the cluster to be ready (request params: "{{ .Values.clusterHealthCheckParams }}" )
                 # Once it has started only check that the node itself is responding
                 START_FILE=/tmp/.es_start_file
@@ -252,8 +247,8 @@ spec:
                     set -- "$@" $args
                   fi
 
-                  if [ -n "${ELASTIC_PASSWORD}" ]; then
-                    set -- "$@" -u "elastic:${ELASTIC_PASSWORD}"
+                  if [ -n "${ELASTIC_USERNAME}" ] && [ -n "${ELASTIC_PASSWORD}" ]; then
+                    set -- "$@" -u "${ELASTIC_USERNAME}:${ELASTIC_PASSWORD}"
                   fi
 
                   curl --output /dev/null -k "$@" "{{ .Values.protocol }}://127.0.0.1:{{ .Values.httpPort }}${path}"
@@ -320,8 +315,6 @@ spec:
             value: "{{ .Values.clusterName }}"
           - name: network.host
             value: "{{ .Values.networkHost }}"
-          - name: cluster.deprecation_indexing.enabled
-            value: "{{ .Values.clusterDeprecationIndexing }}"
           {{- if .Values.esJavaOpts  }}
           - name: ES_JAVA_OPTS
             value: "{{ .Values.esJavaOpts }}"
@@ -357,11 +350,6 @@ spec:
           {{- range $path, $config := .Values.esConfig }}
           - name: esconfig
             mountPath: /usr/share/elasticsearch/config/{{ $path }}
-            subPath: {{ $path }}
-          {{- end -}}
-          {{- range $path, $config := .Values.esJvmOptions }}
-          - name: esjvmoptions
-            mountPath: /usr/share/elasticsearch/config/jvm.options.d/{{ $path }}
             subPath: {{ $path }}
           {{- end -}}
         {{- if .Values.extraVolumeMounts }}

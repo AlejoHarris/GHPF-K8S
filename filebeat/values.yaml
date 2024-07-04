@@ -147,7 +147,7 @@ hostAliases: []
 #  - "foo.local"
 #  - "bar.local"
 image: "docker.elastic.co/beats/filebeat"
-imageTag: "7.17.3"
+imageTag: "7.15.0"
 imagePullPolicy: "IfNotPresent"
 imagePullSecrets: []
 
@@ -187,14 +187,6 @@ clusterRoleRules:
       - namespaces
       - nodes
       - pods
-    verbs:
-      - get
-      - list
-      - watch
-  - apiGroups:
-      - "apps"
-    resources:
-      - replicasets
     verbs:
       - get
       - list
