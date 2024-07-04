@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: filebeat
+  name: elk-filebeat
   namespace: argocd
 spec:
   destination:
     namespace: elk
     server: 'https://kubernetes.default.svc'
   source:
-    path: filebeat
+    path: elk-filebeat
     repoURL: 'https://github.com/AlejoHarris/GHPF-K8S.git'
     targetRevision: HEAD
   project: geekhub
