@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: mysql
+  name: backend-api
   namespace: argocd
 spec:
   destination:
     namespace: geekhub
     server: 'https://kubernetes.default.svc'
   source:
-    path: mysql
+    path: backend
     repoURL: 'https://github.com/AlejoHarris/GHPF-K8S.git'
     targetRevision: HEAD
   project: geekhub
