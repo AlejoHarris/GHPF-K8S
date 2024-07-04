@@ -8,7 +8,7 @@ image:
   repository: alejoharris/ghpf-backend
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 1.6
+  tag: 1.7
 
 imagePullSecrets: []
 nameOverride: ""
@@ -25,7 +25,10 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
-podAnnotations: {}
+podAnnotations: 
+  prometheus.io/scrape: "true"
+  prometheus.io/path: "/metrics"
+  prometheus.io/port: "3000"
 podLabels: {}
 
 podSecurityContext: {}
