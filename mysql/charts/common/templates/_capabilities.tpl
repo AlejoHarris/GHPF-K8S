@@ -18,7 +18,7 @@ Return the appropriate apiVersion for poddisruptionbudget.
 {{- define "common.capabilities.policy.apiVersion" -}}
 {{- $kubeVersion := include "common.capabilities.kubeVersion" . -}}
 {{- if and (not (empty $kubeVersion)) (semverCompare "<1.21-0" $kubeVersion) -}}
-{{- print "policy/v1beta1" -}}
+{{- print "policy/v1" -}}
 {{- else -}}
 {{- print "policy/v1" -}}
 {{- end -}}

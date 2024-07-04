@@ -41,7 +41,7 @@ Return the appropriate apiVersion for pod disruption budget
 {{- if .Values.apiVersionOverrides.pdb -}}
 {{- print .Values.apiVersionOverrides.pdb -}}
 {{- else if semverCompare "<1.21-0" (include "argo-cd.kubeVersion" .) -}}
-{{- print "policy/v1beta1" -}}
+{{- print "policy/v1" -}}
 {{- else -}}
 {{- print "policy/v1" -}}
 {{- end -}}
