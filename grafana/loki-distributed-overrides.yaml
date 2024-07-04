@@ -2060,3 +2060,4 @@ networkPolicy:
     podSelector: {}
     # -- Specifies the namespace the discovery Pods are running in
     namespaceSelector: {}
+
