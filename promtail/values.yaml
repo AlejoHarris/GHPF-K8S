@@ -640,4 +640,3 @@ extraObjects: []
   #     data:
   #       - key: promtail-oauth2-creds
   #         name: client_secret
-

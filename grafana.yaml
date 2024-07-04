@@ -11,11 +11,6 @@ spec:
     path: grafana
     repoURL: 'https://github.com/AlejoHarris/GHPF-K8S.git'
     targetRevision: HEAD
-    helm:
-      valueFiles:
-        - grafana/values.yaml
-        - grafana/loki-distributed-overrides.yaml
-      #  - promtail-overrides.yaml
   project: geekhub
   syncPolicy:
     automated:
