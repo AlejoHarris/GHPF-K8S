@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pf
+  namespace: geekhub
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: www.geekhub-pf.com
+      http:
+        paths:
+          - pathType: Prefix
+            backend:
+              service:
+                name: backend-api 
+                port:
+                  number: 3000
+            path: /api
+          - pathType: Prefix
+            backend:
+              service:
+                name: frontend-app  
+                port:
+                  number: 80
+            path: /
