@@ -58,7 +58,7 @@ autoscaling:
   # targetMemoryUtilizationPercentage: 80
 
 secrets:
-  dbsecret: db-mysql-svcbind-root
+  dbsecret: db-mysql-svcbind
   dbpassword: password
   dbuser: username
   dbhost: host
