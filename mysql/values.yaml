@@ -177,7 +177,6 @@ initdbScripts:
       updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
       published BOOLEAN DEFAULT false
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-    ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
 ## @param initdbScriptsConfigMap ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)
 ##
 initdbScriptsConfigMap: ""
