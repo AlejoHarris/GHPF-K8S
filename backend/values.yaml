@@ -8,7 +8,7 @@ image:
   repository: alejoharris/ghpf-backend
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: vmain.1.24
+  tag: v1.1
 
 imagePullSecrets: []
 nameOverride: ""
