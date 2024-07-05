@@ -132,7 +132,7 @@ auth:
   username: "geekhub"
   ## @param auth.password Password for the new user. Ignored if existing secret is provided
   ##
-  password: ""
+  password: "123456"
   ## @param auth.replicationUser MySQL replication user
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mysql#setting-up-a-replication-cluster
   ##
