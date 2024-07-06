@@ -48,7 +48,6 @@ Selector labels
 {{- define "charts.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "charts.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-app: {{ include "charts.name" . }}
 {{- end }}
 
 {{/*
