@@ -48,6 +48,7 @@ Selector labels
 {{- define "k8s.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "k8s.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+app: {{ include "k8s.name" . }}
 {{- end }}
 
 {{/*

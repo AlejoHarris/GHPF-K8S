@@ -142,7 +142,7 @@
           "useBackend": false
         }
       ],
-      "title": "Health Checks 200 Status Code",
+      "title": "Requests",
       "type": "timeseries"
     },
     {

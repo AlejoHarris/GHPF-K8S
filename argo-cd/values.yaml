@@ -40,6 +40,23 @@ crds:
 
 ## Globally shared configuration
 global:
+  projects:
+  - name: Geekhubs
+    description: Applications
+    destinations:
+      - namespace: 'geekhub'
+        server: https://kubernetes.default.svc
+      - namespace: 'argo-cd'
+        server: https://kubernetes.default.svc
+      - namespace: 'prometheus'
+        server: https://kubernetes.default.svc
+      - namespace: 'grafana'
+        server: https://kubernetes.default.svc
+    sourceRepos:
+      - https://github.com/AlejoHarris/GHPF-K8S.git
+    clusterResourceWhitelist:
+      - group: '*'
+        kind: '*'
   # -- Default domain used by all components
   ## Used for ingresses, certificates, SSO, notifications, etc.
   domain: wwww.geekhub-argocd.com
@@ -501,7 +518,11 @@ configs:
   # -- Repositories list to be used by applications
   ## Creates a secret for each key/value specified below to create repositories
   ## Note: the last example in the list would use a repository credential template, configured under "configs.credentialTemplates".
-  repositories: {}
+  repositories: 
+    geekhub:
+      url: https://github.com/AlejoHarris/GHPF-K8S.git
+      type: git
+      name: GeekHub
     # istio-helm-repo:
     #   url: https://storage.googleapis.com/istio-prerelease/daily-build/master-latest-daily/charts
     #   name: istio.io
