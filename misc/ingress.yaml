@@ -1,12 +1,12 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: pf
+  name: app
   namespace: geekhub
 spec:
   ingressClassName: nginx
   rules:
-    - host: www.geekhub-pf.com
+    - host: www.geekhub-app.com
       http:
         paths:
           - pathType: Prefix
