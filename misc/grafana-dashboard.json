@@ -127,6 +127,21 @@
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "204"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "super-light-green",
+                  "mode": "fixed"
+                }
+              }
+            ]
           }
         ]
       },
@@ -455,6 +470,6 @@
   "timezone": "browser",
   "title": "API Monitoring",
   "uid": "edqs0q7x5dgxsf",
-  "version": 3,
+  "version": 4,
   "weekStart": ""
 }
