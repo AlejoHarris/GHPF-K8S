@@ -611,21 +611,21 @@ plugins: []
 ## ref: http://docs.grafana.org/administration/provisioning/#datasources
 ##
 datasources:
-  - name: Prometheus
-    type: prometheus
-    url: http://prometheus-server.prometheus.svc.cluster.local
-    access: proxy
-    isDefault: true
-    jsonData:
-      timeout: 5s
-      tlsSkipVerify: true
-  - name: Loki
-    type: loki
-    access: proxy
-    url: http://loki-distributed-gateway.grafana.svc.cluster.local
-    jsonData:
-      timeout: 5s
-      tlsSkipVerify: true
+- name: Prometheus
+  type: prometheus
+  url: http://prometheus-server.prometheus.svc.cluster.local
+  access: proxy
+  isDefault: true
+  jsonData:
+    timeout: 5s
+    tlsSkipVerify: true
+- name: Loki
+  type: loki
+  access: proxy
+  url: http://loki-distributed-gateway.grafana.svc.cluster.local
+  jsonData:
+    timeout: 5s
+    tlsSkipVerify: true
 
 #  datasources.yaml:
 #    apiVersion: 1
