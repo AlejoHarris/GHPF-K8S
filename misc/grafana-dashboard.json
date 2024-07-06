@@ -24,7 +24,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edqs2vlilhb7ke"
+        "uid": "PBFA97CFB590B2093"
       },
       "fieldConfig": {
         "defaults": {
@@ -37,27 +37,16 @@
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 80,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
+            "lineWidth": 0,
             "scaleDistribution": {
               "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
             },
             "thresholdsStyle": {
               "mode": "off"
@@ -92,13 +81,49 @@
                 "readOnly": true
               }
             },
+            "properties": []
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "201"
+            },
             "properties": [
               {
-                "id": "custom.hideFrom",
+                "id": "color",
                 "value": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": true
+                  "fixedColor": "light-green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "200"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "500"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-red",
+                  "mode": "fixed"
                 }
               }
             ]
@@ -107,22 +132,34 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 9,
+        "w": 12,
         "x": 0,
         "y": 0
       },
       "id": 3,
       "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
         "legend": {
-          "calcs": [],
+          "calcs": [
+            "lastNotNull"
+          ],
           "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
         },
+        "orientation": "auto",
+        "showValue": "never",
+        "stacking": "none",
         "tooltip": {
           "mode": "single",
           "sort": "none"
-        }
+        },
+        "xField": "Time",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 200
       },
       "pluginVersion": "11.1.0",
       "targets": [
@@ -132,8 +169,8 @@
             "uid": "edqs2vlilhb7ke"
           },
           "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "increase(http_requests_total{status_code=\"200\"}[24h])",
+          "editorMode": "code",
+          "expr": "sum (http_requests_total) by (status_code)",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -143,12 +180,12 @@
         }
       ],
       "title": "Requests",
-      "type": "timeseries"
+      "type": "barchart"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edqs2vlilhb7ke"
+        "uid": "PBFA97CFB590B2093"
       },
       "fieldConfig": {
         "defaults": {
@@ -206,8 +243,8 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 10,
-        "x": 9,
+        "w": 12,
+        "x": 12,
         "y": 0
       },
       "id": 5,
@@ -230,8 +267,8 @@
             "uid": "edqs2vlilhb7ke"
           },
           "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "container_memory_usage_bytes{pod=\"backend-api-598df489cd-6ht25\"}",
+          "editorMode": "code",
+          "expr": "sum(rate(container_memory_usage_bytes{namespace=\"geekhub\"}[1m])) by (pod)",
           "fullMetaSearch": false,
           "hide": true,
           "includeNullMetadata": true,
@@ -249,7 +286,7 @@
           },
           "expression": "$A/1000000",
           "hide": false,
-          "refId": "B",
+          "refId": "Mem",
           "type": "math"
         }
       ],
@@ -258,8 +295,82 @@
     },
     {
       "datasource": {
+        "type": "loki",
+        "uid": "P8E80F9AEF21F6940"
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 1,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": false,
+        "sortOrder": "Descending",
+        "wrapLogMessage": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "editorMode": "code",
+          "expr": "{container=\"backend-api\"} | json | line_format \"{{.log}}\" | json | level=\"info\" | line_format \"{{.time}} | {{.message}}\" ",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Info Logs",
+      "type": "logs"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "P8E80F9AEF21F6940"
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "id": 2,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": false,
+        "sortOrder": "Descending",
+        "wrapLogMessage": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "editorMode": "code",
+          "expr": "{container=\"backend-api\"} | json | line_format \"{{.log}}\" | json | level=\"error\" | line_format \"{{.time}} | {{.message}}\" ",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Error  Logs",
+      "type": "logs"
+    },
+    {
+      "datasource": {
         "type": "prometheus",
-        "uid": "edqs2vlilhb7ke"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "",
       "fieldConfig": {
@@ -287,9 +398,9 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 5,
-        "x": 19,
-        "y": 0
+        "w": 24,
+        "x": 0,
+        "y": 13
       },
       "id": 4,
       "options": {
@@ -315,8 +426,8 @@
             "uid": "edqs2vlilhb7ke"
           },
           "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "container_cpu_usage_seconds_total{pod=\"backend-api-598df489cd-6ht25\"}",
+          "editorMode": "code",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"geekhub\"}[1m])) by (pod)",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -328,80 +439,6 @@
       ],
       "title": "CPU Usage",
       "type": "gauge"
-    },
-    {
-      "datasource": {
-        "type": "loki",
-        "uid": "edqs2t3jymnswb"
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 24,
-        "x": 0,
-        "y": 8
-      },
-      "id": 1,
-      "options": {
-        "dedupStrategy": "exact",
-        "enableLogDetails": true,
-        "prettifyLogMessage": false,
-        "showCommonLabels": false,
-        "showLabels": false,
-        "showTime": false,
-        "sortOrder": "Descending",
-        "wrapLogMessage": true
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "bdqs04yhbi39cc"
-          },
-          "editorMode": "builder",
-          "expr": "{container=\"backend-api\"} |= `info`",
-          "queryType": "range",
-          "refId": "A"
-        }
-      ],
-      "title": "Info Logs",
-      "type": "logs"
-    },
-    {
-      "datasource": {
-        "type": "loki",
-        "uid": "edqs2t3jymnswb"
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 24,
-        "x": 0,
-        "y": 15
-      },
-      "id": 2,
-      "options": {
-        "dedupStrategy": "exact",
-        "enableLogDetails": true,
-        "prettifyLogMessage": false,
-        "showCommonLabels": false,
-        "showLabels": false,
-        "showTime": false,
-        "sortOrder": "Descending",
-        "wrapLogMessage": true
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "bdqs04yhbi39cc"
-          },
-          "editorMode": "builder",
-          "expr": "{container=\"backend-api\"} |= `error`",
-          "queryType": "range",
-          "refId": "A"
-        }
-      ],
-      "title": "Error  Logs",
-      "type": "logs"
     }
   ],
   "refresh": "10s",
@@ -418,6 +455,6 @@
   "timezone": "browser",
   "title": "API Monitoring",
   "uid": "edqs0q7x5dgxsf",
-  "version": 7,
+  "version": 3,
   "weekStart": ""
 }
